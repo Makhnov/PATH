@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "algorithms": [
+    {
+      "enabled": true,
+      "states": [],
+      "policies": [
+        "strict"
+      ],
+      "counter_validation": "standard",
+      "specific_metrics": [],
+      "collections": [],
+      "structure_note": "",
+      "uses_heuristic": true,
+      "ui_model": "standard",
+      "id": "astar_lazy",
+      "command": "astar",
+      "label": "A* lazy",
+      "short_label": "A*",
+      "adapter": "src/algo/adapters/astar.rs"
+    },
+    {
+      "enabled": true,
+      "states": [],
+      "policies": [
+        "strict"
+      ],
+      "counter_validation": "standard",
+      "specific_metrics": [],
+      "collections": [],
+      "structure_note": "",
+      "uses_heuristic": false,
+      "ui_model": "standard",
+      "id": "dijkstra_lazy",
+      "command": "dijkstra",
+      "label": "Dijkstra",
+      "short_label": "D",
+      "adapter": "src/algo/adapters/dijkstra.rs"
+    },
+    {
+      "enabled": true,
+      "states": [
+        "coupled",
+        "decoupled"
+      ],
+      "policies": [
+        "strict",
+        "spatial_tiebreak"
+      ],
+      "counter_validation": "countdown",
+      "specific_metrics": [],
+      "collections": [],
+      "structure_note": "",
+      "uses_heuristic": true,
+      "ui_model": "countdown",
+      "id": "astar_countdown",
+      "command": "astar_countdown",
+      "label": "A* Countdown",
+      "short_label": "C",
+      "adapter": "src/algo/adapters/countdown.rs"
+    },
+    {
+      "enabled": true,
+      "states": [
+        "coupled",
+        "decoupled"
+      ],
+      "policies": [
+        "strict",
+        "tile_aware",
+        "spatial_tiebreak"
+      ],
+      "counter_validation": "functional",
+      "specific_metrics": [],
+      "collections": [],
+      "structure_note": "",
+      "uses_heuristic": true,
+      "ui_model": "bucket",
+      "id": "astar_bucket",
+      "command": "astar_bucket",
+      "label": "A* Bucket",
+      "short_label": "B",
+      "adapter": "src/algo/adapters/bucket.rs"
+    },
+    {
+      "enabled": true,
+      "states": [
+        "coupled"
+      ],
+      "policies": [
+        "spatial_priority",
+        "spatial_tiebreak"
+      ],
+      "counter_validation": "functional",
+      "specific_metrics": [
+        "window_delta",
+        "window_batch",
+        "tile_batches",
+        "tile_switches",
+        "tile_max_batch",
+        "tile_relaxed_pops",
+        "tile_stale_pops",
+        "tile_peak_active_tiles",
+        "fslack_max"
+      ],
+      "collections": [
+        {
+          "label": "File externe",
+          "key": "max_global_bytes",
+          "count_key": "max_global",
+          "entry_bytes": 16
+        },
+        {
+          "label": "Fenêtre",
+          "key": "max_local_bytes",
+          "count_key": "max_local",
+          "entry_bytes": 16
+        },
+        {
+          "label": "State (Cost + Previous)",
+          "key": "max_states_bytes",
+          "count_key": "max_states",
+          "entry_bytes": 12,
+          "group": "État",
+          "state": "coupled"
+        }
+      ],
+      "structure_note": "A* Window : fenêtre de candidats dans un RRB-tree SWAP ; surplus dans un B-tree SWAP. Les maxima sont des tailles logiques.",
+      "uses_heuristic": true,
+      "ui_model": "standard",
+      "id": "astar_window",
+      "command": "window",
+      "label": "A* Window",
+      "short_label": "W",
+      "adapter": "src/algo/adapters/window.rs",
+      "parameters": {
+        "delta": 64,
+        "max_batch": 32,
+        "window": 1024
+      },
+      "metric_labels": {
+        "window_delta": "Marge f autorisée",
+        "window_batch": "Plafond du lot",
+        "tile_batches": "Lots sélectionnés",
+        "tile_switches": "Changements de tuile",
+        "tile_max_batch": "Plus grand lot observé",
+        "tile_relaxed_pops": "Extractions au-delà du f minimal",
+        "tile_stale_pops": "Labels périmés",
+        "tile_peak_active_tiles": "Maximum de tuiles dans la fenêtre et sa tête externe",
+        "fslack_max": "Écart f maximal observé"
+      },
+      "description": "A* Window conserve une fenêtre bornée de candidats dans SWAP ; le surplus reste dans une file SWAP. L’état regroupé conserve les meilleurs coûts et les prédécesseurs pour les réouvertures et la reconstruction du chemin.",
+      "policy_notes": {
+        "spatial_priority": "Priorité à la tuile active dans la fenêtre SWAP, même au-delà du minimum de f : marge de 16, lots de 32 extractions au maximum. Cet ordre diffère réellement de A*. Les réouvertures et la borne globale garantissent le plus court chemin exact.",
+        "spatial_tiebreak": "Minimum de f, puis rang physique de la tuile parmi les candidats de la fenêtre SWAP à égalité de f. Aucune extraction au-delà du minimum de f."
+      },
+      "replay_collections": [
+        {
+          "id": "global",
+          "label": "File externe"
+        },
+        {
+          "id": "local",
+          "label": "Fenêtre"
+        },
+        {
+          "id": "states",
+          "label": "State (Cost + Previous)",
+          "state": "coupled"
+        }
+      ],
+      "structure_notes": {
+        "coupled": "A* Window : fenêtre de candidats dans un RRB-tree SWAP ; surplus dans un B-tree SWAP. Les maxima sont des tailles logiques. State (Cost + Previous) conserve le coût et le prédécesseur. Les meilleurs coûts restent persistants pour rejeter les labels périmés et permettre les réouvertures."
+      },
+      "hidden_option_groups": [
+        "neighbor_access",
+        "bucket_state"
+      ]
+    }
+  ],
+  "option_labels": {
+    "states": [
+      {
+        "id": "coupled",
+        "label": "Regroupées"
+      },
+      {
+        "id": "decoupled",
+        "label": "Séparées"
+      }
+    ],
+    "policies": [
+      {
+        "id": "strict",
+        "label": "Stricte"
+      },
+      {
+        "id": "tile_aware",
+        "label": "Tile-aware"
+      },
+      {
+        "id": "spatial_tiebreak",
+        "label": "Départage spatial"
+      },
+      {
+        "id": "spatial_priority",
+        "label": "Priorité spatiale"
+      }
+    ]
+  }
+}

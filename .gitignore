@@ -1,0 +1,12 @@
+target/
+output/
+temp/
+_output/
+_hilbert/
+_zcurve/
+_base/
+__pycache__/
+*.pyc
+bench/*
+!bench/scenarios.csv
+!bench/configs.csv

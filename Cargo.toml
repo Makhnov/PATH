@@ -1,0 +1,112 @@
+[package]
+name = "lib-gps"
+version = "0.1.0"
+edition = "2024"
+autobins = false
+default-run = "viewer-bin"
+
+[[bin]]
+# Lancement avec interface web pour la visualisation spatiale
+name = "viewer-bin"
+path = "src/bin/viewer.rs"
+required-features = ["viewer"]
+
+[[bin]]
+# Lancement des benchmarks pour les comparaison d'algo
+name = "bench-bin"
+path = "src/bin/bench.rs"
+required-features = ["host"]
+
+[dependencies]
+# byteorder = "1.5.0" # Remplacé par ByteReader (src/format/reader.rs)
+# itertools = "0.14.0"
+chrono = { version = "0.4.45", optional = true }
+
+# Conversion Json
+serde = { version = "1.0", features = ["derive"], optional = true }
+
+# Entrées/sorties JSON
+serde_json = { version = "1.0", optional = true }
+
+# Serveur HTTP
+axum = { version = "0.8", optional = true }
+
+# Environnement d'exécution asynchrone
+tokio = { version = "1.0", features = [
+    "macros",
+    "rt-multi-thread",
+    "net",
+], optional = true }
+
+# Fichiers statiques
+tower-http = { version = "0.7", features = ["fs"], optional = true }
+
+# Collections asynchrones
+swap-cache = { git = "ssh://git@gitlab.ensimag.fr/montaurn/swap.git", rev = "d9ed1916f8f235f910e17d562aaa9ed726fadf24", default-features = false }
+
+# Primitives Embassy
+embassy-futures = { version = "0.1", optional = true, default-features = false }
+embassy-sync = { version = "0.8", optional = true, default-features = false }
+embassy-time = { version = "0.5.0", optional = true, features = [
+    "generic-queue-8",
+] }
+embassy-executor = { version = "0.10.0", optional = true, features = [
+    "nightly",
+    "platform-std",
+    "executor-thread",
+] }
+
+# CriticalSectionRawMutex
+critical-section = { version = "1.2", optional = true, features = ["std"] }
+
+# Affichage des stats
+env_logger = { version = "0.11.6", optional = true }
+
+[features]
+default = ["viewer", "perf"]
+
+# Benchmark sans instrumentation : mesure de performance de référence.
+perf = ["dep:embassy-time"]
+
+# Benchmark instrumenté : métriques swap-cache + événements de replay.
+inspect = ["dep:embassy-time", "swap-cache/stats", "swap-cache/std"]
+
+swap-64 = ["swap-cache/block-size-64"]
+swap-128 = ["swap-cache/block-size-128"]
+swap-256 = ["swap-cache/block-size-256"]
+swap-512 = ["swap-cache/block-size-512"]
+
+# De base on est en 512 blocs (128Ko de RAM)
+cache-128k = []
+cache-256k = []
+
+# Délais simulés de la flash swap-cache
+latency = ["swap-cache/mock-latency"]
+
+# Dépendances communes aux exécutables PC
+host = [
+    "serde_json",
+    "dep:chrono",
+    "dep:env_logger",
+    "swap-256",
+    "swap-cache/std",
+    "swap-cache/log",
+
+    "dep:embassy-executor",
+    "dep:embassy-futures",
+    "dep:embassy-sync",
+    "dep:embassy-time",
+    "dep:critical-section",
+]
+
+# Worker de benchmark spécialisé par mode/profil
+bench-worker = ["host", "serde", "serde_json"]
+
+# Visualisation web
+viewer = ["host", "serde", "serde_json", "axum", "tokio", "tower-http"]
+
+# Bibliothèque bare metal, avec le pilote flash RP2040 de swap-cache.
+rp2040 = ["perf", "swap-256", "swap-cache/flash_rp2040"]
+
+[build-dependencies]
+serde_json = "1.0"

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>lib-gps viewer</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body class="bench-mode">
+  <div id="app">
+    <header id="topbar">
+      <div class="brand">
+        <div class="eyebrow">lib-gps</div>
+        <div>
+          <h1>Viewer GPS</h1>
+          <p id="subtitle">Chargement…</p>
+        </div>
+      </div>
+
+      <section class="mode-switch">
+        <div id="mode-toggle" class="toggle-row"></div>
+      </section>
+    </header>
+
+    <section id="bench-controls-card" class="card bench-card">
+      <div class="bench-top-row">
+        <label class="field-label scenario-field">
+          Architecture cible
+          <select id="bench-swap-profile"></select>
+        </label>
+
+        <label class="field-label scenario-field">
+          Sélection du chemin
+          <select id="bench-scenario"></select>
+        </label>
+
+        <label id="bench-baseline-field" class="field-label scenario-field">
+          Algorithme de référence (TCEPA)
+          <select id="bench-baseline-algo" title="Seul l’algorithme de référence change ; les options applicables sont reprises automatiquement."></select>
+        </label>
+
+        <div id="bench-options" class="bench-options"></div>
+
+    </section>
+
+    <section id="visualize-cache-timeline" class="card visualize-cache-timeline bench-card" hidden></section>
+
+    <main id="bench-main" class="bench-card">
+      <section id="bench-metrics-card" class="card">
+        <div class="bench-section-head">
+          <div>
+            <h2>Dashboard</h2>
+            <div id="bench-status" class="bench-status">Chargement…</div>
+          </div>
+        </div>
+
+        <div id="bench-visuals"></div>
+      </section>
+    </main>
+
+    <aside id="bench-side" class="bench-card">
+      <section class="card">
+        <h2>Scénario</h2>
+        <div id="bench-scenario-info" class="scenario-info"></div>
+      </section>
+
+      <section class="card">
+        <h2>Résumé</h2>
+        <div id="bench-side-content"></div>
+      </section>
+    </aside>
+
+    <section id="bench-details" class="bench-card">
+      <div id="bench-details-content"></div>
+    </section>
+
+    <main id="viewport">
+      <canvas id="map"></canvas>
+      <div id="visualize-layout-controls" class="visualize-layout-controls" hidden>
+        <button id="visualize-toggle-left" type="button" title="Réduire le panneau gauche" aria-label="Réduire le panneau gauche" aria-pressed="false">‹</button>
+        <button id="visualize-toggle-right" type="button" title="Réduire le panneau droit" aria-label="Réduire le panneau droit" aria-pressed="false">›</button>
+      </div>
+      <div id="visualize-spatial-controls" class="visualize-spatial-controls" hidden>
+        <div class="visualize-spatial-buttons" role="group" aria-label="Mode de visualisation spatiale">
+          <button type="button" data-spatial-mode="open_set">Frontière</button>
+          <button type="button" data-spatial-mode="locality" class="active">Cache</button>
+        </div>
+        <small id="visualize-spatial-status"></small>
+      </div>
+      <div id="visualize-miss-legend" class="visualize-miss-legend" hidden></div>
+      <div id="hud"></div>
+    </main>
+    <aside id="visualize-panel" class="card visualize-card" hidden>
+      <div class="visualize-header">
+        <div>
+          <h2>Replay instrumenté</h2>
+          <div id="visualize-status" class="bench-status">Sélectionne un run instrumenté.</div>
+        </div>
+        <div id="visualize-run-meta" class="visualize-run-meta"></div>
+      </div>
+
+      <div class="visualize-speed-row">
+        <label>
+          Vitesse
+          <select id="visualize-speed">
+            <option value="real" disabled>Réelle · durée perf indisponible</option>
+            <option value="1" selected>×1</option>
+            <option value="0.25">×0,25</option>
+            <option value="0.5">×0,5</option>
+            <option value="2">×2</option>
+            <option value="4">×4</option>
+            <option value="8">×8</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="visualize-controls">
+        <button id="visualize-play" type="button">Lire</button>
+        <button id="visualize-pause" type="button">Pause</button>
+        <button id="visualize-reset" type="button">Recommencer</button>
+      </div>
+
+      <div class="visualize-progress-row">
+        <progress id="visualize-progress" value="0" max="1"></progress>
+        <span id="visualize-progress-label">0 / 0</span>
+      </div>
+
+      <div id="visualize-current-event" class="visualize-current-event"></div>
+      <section id="visualize-ram" class="visualize-ram" aria-label="Données logiques résidentes dans le cache"></section>
+      <div id="visualize-collections" class="visualize-collections"></div>
+      <pre id="visualize-error-json" class="visualize-error-json" hidden></pre>
+    </aside>
+
+  </div>
+
+  <section id="bench-modal" class="bench-modal" hidden aria-hidden="true">
+    <div class="bench-modal-backdrop" data-bench-modal-close></div>
+    <article class="bench-modal-panel" role="dialog" aria-modal="true" aria-labelledby="bench-modal-title">
+      <header class="bench-modal-header">
+        <div>
+          <div id="bench-modal-kicker" class="modal-kicker"></div>
+          <h2 id="bench-modal-title">Détail métrique</h2>
+        </div>
+        <button id="bench-modal-close" type="button" aria-label="Fermer" data-bench-modal-close>Fermer</button>
+      </header>
+      <div id="bench-modal-content" class="bench-modal-content"></div>
+    </article>
+  </section>
+
+  <script src="/js/log.js"></script>
+  <script type="module" src="/app.js"></script>
+</body>
+
+</html>

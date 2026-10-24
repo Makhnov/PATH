@@ -1,0 +1,192 @@
+/* Localité réelle: même grammaire visuelle que Flash & cache. */
+.locality-card-primary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.locality-card-comparison,
+.locality-card-context {
+  margin-top: 14px;
+}
+
+.locality-card-comparison .memory-card-comparison-group + .memory-card-comparison-group {
+  margin-top: 9px;
+}
+
+.locality-card-context {
+  padding-top: 12px;
+  border-top: 1px solid rgba(148, 163, 184, .14);
+}
+
+.locality-card-context-grid {
+  margin-top: 0;
+}
+
+#bench-modal[data-theme="locality"] .bench-modal-panel {
+  width: min(94vw, 1560px);
+}
+
+.modal-layout.locality-modal-layout {
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.locality-modal-layout > * {
+  min-width: 0;
+}
+
+.locality-rate-axis,
+.locality-jump-axis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 2px 82px 8px 92px;
+  color: var(--muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.locality-rate-axis span:nth-child(2),
+.locality-jump-axis span:nth-child(2) {
+  text-align: center;
+}
+
+.locality-rate-axis span:last-child,
+.locality-jump-axis span:last-child {
+  text-align: right;
+}
+
+.locality-compare-list {
+  display: grid;
+  gap: 12px;
+}
+
+.locality-compare-row,
+.locality-jump-row {
+  padding: 10px 11px;
+  border: 1px solid rgba(148, 163, 184, .14);
+  border-radius: 11px;
+  background: rgba(15, 18, 24, .34);
+}
+
+.locality-compare-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 7px;
+}
+
+.locality-compare-head > strong {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.locality-compare-head > span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+.locality-compare-line {
+  display: grid;
+  grid-template-columns: 48px minmax(80px, 1fr) minmax(64px, max-content);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.locality-compare-line > strong {
+  color: var(--text);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.locality-rate-track {
+  position: relative;
+  height: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, .14);
+  border-radius: 999px;
+  background: rgba(4, 8, 14, .72);
+}
+
+.locality-rate-fill {
+  height: 100%;
+  border-radius: inherit;
+}
+
+.locality-rate-fill.selected {
+  background: linear-gradient(90deg, #60a5fa, #4ade80);
+}
+
+.locality-rate-fill.baseline {
+  background: rgba(148, 163, 184, .55);
+}
+
+.locality-jump-max {
+  margin: 7px 0 0 56px;
+  color: var(--muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.locality-context-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.locality-context-kpi {
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid rgba(148, 163, 184, .16);
+  border-radius: 11px;
+  background: rgba(15, 18, 24, .42);
+}
+
+.locality-context-kpi span,
+.locality-context-kpi small {
+  display: block;
+  color: var(--muted);
+}
+
+.locality-context-kpi span {
+  font-size: 11px;
+}
+
+.locality-context-kpi strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--text);
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.locality-context-kpi small {
+  margin-top: 5px;
+  font-size: 10px;
+}
+
+.locality-algo-table-wrap {
+  max-height: 430px;
+}
+
+.locality-algo-table th:not(:first-child),
+.locality-algo-table td:not(:first-child),
+.time-io-crosscheck-table th:not(:first-child),
+.time-io-crosscheck-table td:not(:first-child) {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.time-io-crosscheck-wrap {
+  max-height: 330px;
+}
+
